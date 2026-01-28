@@ -1,0 +1,9 @@
+{
+  "manifest_version": 3,
+  "name": "Scraping",
+  "version": "1.0",
+  "description": "Resumen de productos de Falabella",
+  "actions": {
+    "default_popup": "popup.html"
+  }
+}
