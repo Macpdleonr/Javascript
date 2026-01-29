@@ -30,7 +30,7 @@ function buildFormHtml(products) {
             <input type="checkbox" name="selected" value="${i}" class="mt-1 h-4 w-4 text-indigo-600 border-gray-300 rounded" />
             <div class="flex-1">
               <div class="font-semibold text-sm text-gray-800">${escapeHtml(p.nombreArticulo) || '-'}</div>
-              <div class="text-xs text-gray-500">${escapeHtml(p.marca) || ''}  ${escapeHtml(p.precioArticulo) || ''}</div>
+              <div class="text-xs text-gray-500">${escapeHtml(p.marca) || ''} . ${escapeHtml(p.precioArticulo) || ''}</div>
               ${p.descuento ? `<div class="text-xs text-green-600 font-medium">${escapeHtml(p.descuento)}</div>`: ''}
             </div>
           </label>`).join('')}
@@ -44,11 +44,10 @@ function buildFormHtml(products) {
   `;
 }
 
-async function handleInjection() {}
+async function handleInjection() {
+  const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
-scrapeButtonElement.addEventListener('click', async () => {
-    const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true }); 
-    chrome.scripting.executeScript({
+  chrome.scripting.executeScript({
       target: { tabId: activeTab.id },
       function: () => {
         console.log('Scraping Falabella Products ...');
@@ -59,15 +58,13 @@ scrapeButtonElement.addEventListener('click', async () => {
 
           return {marca, nombreArticulo, quienComercializa, precioArticulo, descuento}
       })
-
       return productos;
-
     }
-  }).then((injectionResults) => {
+}).then((injectionResults) => {
     for (const frameResult of injectionResults) {
       const products = frameResult.result || [];
-      const result = document.getElementById('result');
-      result.innerHTML = buildFormHtml(products);
+      const resultThese = document.getElementById('result');
+      resultThese.innerHTML = buildFormHtml(products);
 
       const exportBtn = document.getElementById('exportBtn');
       const copyBtn = document.getElementById('copyBtn');
@@ -107,5 +104,10 @@ scrapeButtonElement.addEventListener('click', async () => {
     }
   }
 });
+}
+scrapeButtonElement.addEventListener('click', handleInjection);
 
+clearButtonElement.addEventListener('click', () => {
+  const resultThese = document.getElementById('result');
+  if(resultThese) resultThese.innerHTML = '';
 });
