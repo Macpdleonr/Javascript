@@ -18,13 +18,33 @@ function buildFormHtml(products) {
   }
   return `
     <form id="productsForm" class="space-y-3">
+
       <div class="p-3 bg-white rounded shadow">
         <h2 class="text-lg font-medium text-gray-800">Productos encontrados</h2>
         <p class="text-sm text-gray-500">Selecciona los productos que deseas exportar o copiar.</p>
       </div>
+
+      <div class="space-y-2 max-h-48 overflow-auto">
+        ${products.map((p, i) => `
+          <label class="flex items-start gap-3 p-3 bg-white rounded shadow-sm hover:bg-gray-50">
+            <input type="checkbox" name="selected" value="${i}" class="mt-1 h-4 w-4 text-indigo-600 border-gray-300 rounded" />
+            <div class="flex-1">
+              <div class="font-semibold text-sm text-gray-800">${escapeHtml(p.nombreArticulo) || '-'}</div>
+              <div class="text-xs text-gray-500">${escapeHtml(p.marca) || ''}  ${escapeHtml(p.precioArticulo) || ''}</div>
+              ${p.descuento ? `<div class="text-xs text-green-600 font-medium">${escapeHtml(p.descuento)}</div>`: ''}
+            </div>
+          </label>`).join('')}
+      </div>
+
+      <div class="flex gap-2">
+        <button type="button" id="exportBtn" class="flex-1 px-3 py-2 bg-indigo-600 text-white rounded">Exportar CSV</button>
+        <button type="button" id="copyBtn" class="px-3 py-2 bg-gray-100 text-gray-700 rounded">Copiar JSON</button>
+      </div>
     </form>
-  `
+  `;
 }
+
+async function handleInjection() {}
 
 scrapeButtonElement.addEventListener('click', async () => {
     const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true }); 
