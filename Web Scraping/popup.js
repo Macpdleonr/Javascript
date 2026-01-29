@@ -14,8 +14,16 @@ function escapeHtml(str) {
 
 function buildFormHtml(products) {
   if(!products || products.length === 0) {
-    return '<div class=""'
+    return `<div class="p-4 bg-white rounded shadow text-gray-600">No se encontraron productos.</div>`;
   }
+  return `
+    <form id="productsForm" class="space-y-3">
+      <div class="p-3 bg-white rounded shadow">
+        <h2 class="text-lg font-medium text-gray-800">Productos encontrados</h2>
+        <p class="text-sm text-gray-500">Selecciona los productos que deseas exportar o copiar.</p>
+      </div>
+    </form>
+  `
 }
 
 scrapeButtonElement.addEventListener('click', async () => {
