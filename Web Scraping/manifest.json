@@ -3,11 +3,11 @@
   "name": "Scraping de Falabella",
   "version": "1.0",
   "description": "Resumen de productos de Falabella",
-  "actions": {
+  "action": {
     "default_popup": "popup.html"
   },
   "permissions": [
-    "activeTab",
-    "scripting"
+    "scripting",
+    "activeTab"
   ]
 }
