@@ -20,7 +20,7 @@ function collectContentEntries() {
 
     const base = file.replace(/\.tsx?|\.jsx?$/,'')
 
-    entries['content_${base}'] = full
+    entries[`content_${base}`] = full
   }
   return entries
 }
@@ -40,7 +40,7 @@ export default defineConfig({
       ),
       output: {
         entryFileNames: (chunkInfo) => {
-          const name = chunkInfo.name
+          const name = chunkInfo.name || ''
           if (name === 'popup') return 'src/popup/popup.js'
           if (name.startsWith('content_')) return `content/${name.replace('content_','')}.js`
           return '[name].js'
